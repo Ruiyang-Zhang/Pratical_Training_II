@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+      xmlns:p="http://www.springframework.org/schema/p"
+      xmlns:aop="http://www.springframework.org/schema/aop"
+      xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+			http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/aop  	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+    <!-- 启动SpringMVC 注解 -->
+    <mvc:annotation-driven/>
+    <!-- 扫描,如果有多个包的情况下使用逗号进行分隔 -->
+    <context:component-scan base-package="com.birmingham.*"/>
+    <!-- 读取属性文件 -->
+    <!-- 静态资源 -->
+    <!-- tomcat conf web.xml -->
+    <mvc:default-servlet-handler default-servlet-name="default"/>
+    
+    <!-- JSP视图解析器 -->
+    
+    <!-- SpringMVC提供的默认控制器 -->
+    
+     <bean id="multipartResolver" 
+    class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxUploadSize" value="20971520"/>
+        <property name="maxInMemorySize" value="2048"/>
+        <property name="resolveLazily" value="true"/>
+    </bean>
+    	 <!-- 数据源配置 -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+		destroy-method="close" lazy-init="false">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://127.0.0.1:3307/old_man_sys?useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=UTC" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
+    
+    <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation">
+			<value>classpath:sqlmap/mysql/sql-map-config.xml</value>
+		</property>
+		<property name="dataSource" ref="dataSource" />
+		<property name="lobHandler" ref="lobHandler" />
+	</bean> 
+	
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- 配置事务特性 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="load*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="page*" read-only="true" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 基于@Transactional注解方式的事务管理 -->  
+	<tx:annotation-driven transaction-manager="transactionManager"/>   
+	
+	<aop:config proxy-target-class="true">
+		<aop:advisor pointcut="execution(* com.yitong.app.service.*Service.*(..))"
+			advice-ref="txAdvice" />
+	</aop:config>
+	
+	
+	
+   <!-- Generic Dao - can be used when doing standard CRUD -->
+	<bean id="ibatisDao" class="com.birmingham.dao.BaseIbatisDao">
+		<property name="dataSource" ref="dataSource" />
+		<property name="sqlMapClient" ref="sqlMapClient" />
+	</bean> 
+  
+    
+    
+
+
+    <!-- 统一的异常处理 -->
+<!--     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="defaultErrorView" value="jsp/error"/>
+        <property name="exceptionAttribute" value="ex"/>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.RuntimeException">jsp/login</prop>
+                <prop key="java.lang.Exception">jsp/login</prop>
+            </props>
+        </property>
+    </bean>  -->
+ 
+</beans>

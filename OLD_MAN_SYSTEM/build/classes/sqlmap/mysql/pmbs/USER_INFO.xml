@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="USER_INFO">
+
+
+  	 <!-- 用户登陆  注意返回List的时候应该填里面的泛型-->
+    <select id="login"  parameterClass="map"  resultClass="java.util.HashMap">
+    <![CDATA[ 
+      SELECT * FROM  sys_user WHERE ACCOUNT=#ACCOUNT#   AND  PASSWORD=#PASSWORD#
+    ]]>
+    </select>
+    
+     <!--  登录信息添加 -->
+    <insert id="register"  parameterClass="map">
+    <![CDATA[ 
+     INSERT INTO sys_user(ACCOUNT,PASSWORD)
+    VALUES
+    (#ACCOUNT#,#PASSWORD#)
+    ]]>
+    </insert>
+     
+     
+</sqlMap>
+

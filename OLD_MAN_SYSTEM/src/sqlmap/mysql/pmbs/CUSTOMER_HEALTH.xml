@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="CUSTOMER_HEALTH">
+    <!-- 添加信息 -->
+    <insert id="addBatch" parameterClass="java.util.HashMap">
+          INSERT INTO 
+              sys_customer_health   
+                (HEALTH_ID,CUSTOMER_ID,SICK_HISTORY,SELF_CARE,EMPLOYEE_ID)
+            VALUES
+                (#HEALTH_ID#,
+                #CUSTOMER_ID#,
+                #SICK_HISTORY#,
+                #SELF_CARE#,
+                #EMPLOYEE_ID#
+                )
+     </insert>
+   
+    <!-- 删除信息 -->
+    <delete id="delete" parameterClass="map" >
+            DELETE FROM
+                 sys_customer_health 
+              WHERE
+                HEALTH_ID=#HEALTH_ID#   
+    </delete>
+    <!-- 改信息修 -->
+    <update id="updateBatch" parameterClass="java.util.HashMap">
+           UPDATE 
+                    sys_customer_health  
+            SET
+                   CUSTOMER_ID=#CUSTOMER_ID#,
+                   SICK_HISTORY=#SICK_HISTORY#,
+                   SELF_CARE=#SELF_CARE#,
+                   EMPLOYEE_ID=#EMPLOYEE_ID#
+           WHERE
+                   HEALTH_ID=#HEALTH_ID#
+        </update>
+   
+    <!-- 查询相关信息 -->
+   <select id="getList" parameterClass="map"     resultClass="java.util.HashMap">
+        SELECT 
+            a.*,b.CUSTOMER_NAME,b.CUSTOMER_ID CUST_ID,c.EMPLOYEE_NAME,c.EMPLOYEE_ID
+        FROM 
+            sys_customer_health a,sys_customer b, sys_employee c
+        WHERE 
+            a.EMPLOYEE_ID=c.EMPLOYEE_ID    and a.CUSTOMER_ID=b.CUSTOMER_ID
+        LIMIT
+          #startNum#,#limit#
+    </select>
+
+
+ <select id="getCount" parameterClass="map"  resultClass="java.lang.Integer" >
+        SELECT 
+              COUNT(*)
+        FROM
+              sys_customer_health
+      </select>
+     
+         <select id="signal" parameterClass="map"   resultClass="java.util.HashMap">
+     SELECT 
+            a.*,b.CUSTOMER_NAME,b.CUSTOMER_ID CUST_ID,c.EMPLOYEE_NAME
+        FROM 
+            sys_customer_health a,sys_customer b, sys_employee c
+    WHERE
+       
+             a.EMPLOYEE_ID=c.EMPLOYEE_ID    and a.CUSTOMER_ID=b.CUSTOMER_ID  and
+   a.HEALTH_ID=#HEALTH_ID# 
+    
+    </select>
+     
+</sqlMap>
+

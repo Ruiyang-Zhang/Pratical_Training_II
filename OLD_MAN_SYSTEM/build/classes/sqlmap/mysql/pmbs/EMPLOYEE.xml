@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="EMPLOYEE">
+    <!-- 添加信息 -->
+    <insert id="addBatch"  parameterClass="java.util.HashMap">
+          INSERT INTO 
+              sys_employee   
+                (EMPLOYEE_ID,EMPLOYEE_NAME,EMPLOYEE_TYPE,EMPLOYEE_IDCARD,EMPLOYEE_PHONE,EMPLOYEE_ADDRESS)
+            VALUES
+                (#EMPLOYEE_ID#,
+                #EMPLOYEE_NAME#,
+                #EMPLOYEE_TYPE#,
+                #EMPLOYEE_IDCARD#,
+                #EMPLOYEE_PHONE#,
+                #EMPLOYEE_ADDRESS#
+                )
+     </insert>
+   
+    <!-- 删除信息 -->
+    <delete id="delete" parameterClass="map">
+            DELETE FROM
+                 sys_employee 
+              WHERE
+                EMPLOYEE_ID=#EMPLOYEE_ID#    
+    </delete>
+    <!-- 改信息修 -->
+    <update id="updateBatch"  parameterClass="java.util.HashMap">
+           UPDATE 
+                    sys_employee  
+            SET
+                   EMPLOYEE_NAME=#EMPLOYEE_NAME#,
+                   EMPLOYEE_TYPE=#EMPLOYEE_TYPE#,
+                   EMPLOYEE_IDCARD=#EMPLOYEE_IDCARD#,
+                   EMPLOYEE_PHONE=#EMPLOYEE_PHONE#,
+                   EMPLOYEE_ADDRESS=#EMPLOYEE_ADDRESS#
+           WHERE
+                   EMPLOYEE_ID=#EMPLOYEE_ID#
+        </update>
+   
+    <!-- 查询相关信息 -->
+   <select id="getList" parameterClass="map"    resultClass="java.util.HashMap">
+        SELECT 
+            *
+        FROM 
+            sys_employee
+        LIMIT
+          #startNum#,#limit#
+    </select>
+
+   <select id="getCount" parameterClass="map"  resultClass="java.lang.Integer" >
+        SELECT 
+              COUNT(*)
+        FROM
+              sys_employee
+      </select>
+     
+         <select id="signal" parameterClass="map"   resultClass="java.util.HashMap">
+     SELECT 
+            *
+        FROM 
+            sys_employee
+    WHERE
+   
+       EMPLOYEE_ID=#EMPLOYEE_ID# 
+    
+    </select>
+     
+</sqlMap>
+

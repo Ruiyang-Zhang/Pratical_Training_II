@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="CUSTOMER">
+    <!-- 添加信息 -->
+    <insert id="addBatch" parameterClass="java.util.HashMap">
+          INSERT INTO 
+              sys_customer   
+                (CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_SEX,CUSTOMER_NATION,CUSTOMER_BIRTH,CUSTOMER_IDCARD,CUSTOMER_ROOM,CUSTOMER_ADDRESS,CUSTOMER_CONTACT_MAN)
+            VALUES
+                (#CUSTOMER_ID#,
+                #CUSTOMER_NAME#,
+                #CUSTOMER_SEX#,
+                #CUSTOMER_NATION#,
+                #CUSTOMER_BIRTH#,
+                #CUSTOMER_IDCARD#,
+                #CUSTOMER_ROOM#,
+                #CUSTOMER_ADDRESS#,
+                #CUSTOMER_CONTACT_MAN#
+                )
+     </insert>
+   
+    <!-- 删除信息 -->
+    <delete id="delete"   parameterClass="map">
+            DELETE FROM
+                 sys_customer 
+              WHERE
+                CUSTOMER_ID=#CUSTOMER_ID#    
+    </delete>
+    <!-- 改信息修 -->
+    <update id="updateBatch" parameterClass="java.util.HashMap">
+           UPDATE 
+                    sys_customer  
+            SET
+                   CUSTOMER_NAME=#CUSTOMER_NAME#,
+                   CUSTOMER_SEX=#CUSTOMER_SEX#,
+                   CUSTOMER_NATION=#CUSTOMER_NATION#,
+                   CUSTOMER_BIRTH=#CUSTOMER_BIRTH#,
+                   CUSTOMER_IDCARD=#CUSTOMER_IDCARD#,
+                   CUSTOMER_ROOM=#CUSTOMER_ROOM#,
+                   CUSTOMER_ADDRESS=#CUSTOMER_ADDRESS#,
+                   CUSTOMER_CONTACT_MAN=#CUSTOMER_CONTACT_MAN#
+           WHERE
+                   CUSTOMER_ID=#CUSTOMER_ID#
+        </update>
+   
+    <!-- 查询相关信息 -->
+   <select id="getList" parameterClass="map"     resultClass="java.util.HashMap">
+        SELECT 
+            *
+        FROM 
+            sys_customer
+        LIMIT
+          #startNum#,#limit#
+    </select>
+
+
+ <select id="getCount" parameterClass="map"  resultClass="java.lang.Integer" >
+        SELECT 
+              COUNT(*)
+        FROM
+              sys_customer
+      </select>
+     
+         <select id="signal" parameterClass="map"   resultClass="java.util.HashMap">
+     SELECT 
+            *
+        FROM 
+            sys_customer
+    WHERE
+    CUSTOMER_ID=#CUSTOMER_ID# 
+    
+    </select>
+     
+     
+</sqlMap>
+

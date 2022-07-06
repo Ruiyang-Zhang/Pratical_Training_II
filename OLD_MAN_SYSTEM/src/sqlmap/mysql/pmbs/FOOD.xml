@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="FOOD">
+    <!-- 添加信息 -->
+    <insert id="addBatch" parameterClass="java.util.HashMap">
+          INSERT INTO 
+              sys_FOOD   
+                (FOOD_ID,CUSTOMER_ID,FOOD_MEMO,FOOD_DATE,FOOD_ZAO,FOOD_WU,FOOD_WAN)
+            VALUES
+                (#FOOD_ID#,
+                #CUSTOMER_ID#,
+                #FOOD_MEMO#,
+                #FOOD_DATE#,
+                #FOOD_ZAO#,
+                #FOOD_WU#,
+                #FOOD_WAN#
+                )
+             
+     </insert>
+   
+    <!-- 删除信息 -->
+    <delete id="delete"  parameterClass="map" >
+            DELETE FROM
+                 sys_FOOD 
+              WHERE
+                FOOD_ID=#FOOD_ID#   
+    </delete>
+    <!-- 改信息修 -->
+    <update id="updateBatch"  parameterClass="java.util.HashMap">
+           UPDATE 
+                    sys_FOOD  
+            SET
+                   CUSTOMER_ID=#CUSTOMER_ID#,
+                   FOOD_MEMO=#FOOD_MEMO#,
+                   FOOD_DATE=#FOOD_DATE#,
+                   FOOD_ZAO=#FOOD_ZAO#,
+                   FOOD_WAN=#FOOD_WAN#,
+                   FOOD_WU=#FOOD_WU#
+           WHERE
+                   FOOD_ID=#FOOD_ID#
+        </update>
+   
+    <!-- 查询相关信息 -->
+   <select id="getList" parameterClass="map"     resultClass="java.util.HashMap">
+        SELECT 
+            a.* ,b.CUSTOMER_NAME,b.CUSTOMER_ID CUST_ID
+        FROM 
+            sys_FOOD a,sys_customer b
+        WHERE
+    		a.CUSTOMER_ID=b.CUSTOMER_ID 
+        LIMIT
+          #startNum#,#limit#
+    </select>
+
+ <select id="getCount" parameterClass="map"  resultClass="java.lang.Integer" >
+        SELECT 
+              COUNT(*)
+        FROM
+              sys_FOOD
+      </select>
+     
+         <select id="signal" parameterClass="map"   resultClass="java.util.HashMap">
+     SELECT 
+            a.* ,b.CUSTOMER_NAME,b.CUSTOMER_ID CUST_ID
+        FROM 
+            sys_FOOD a,sys_customer b
+    WHERE
+    a.CUSTOMER_ID=b.CUSTOMER_ID and
+    FOOD_ID=#FOOD_ID#  
+    
+    </select>
+     
+     
+</sqlMap>
+

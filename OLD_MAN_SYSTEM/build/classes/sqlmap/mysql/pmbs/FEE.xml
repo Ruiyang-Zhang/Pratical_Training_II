@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="FEE">
+    <!-- 添加信息 -->
+    <insert id="addBatch" parameterClass="java.util.HashMap">
+          INSERT INTO 
+              sys_fee   
+                (FEE_ID,CUSTOMER_ID,MONEY,START_DATE,END_DATE,TOTAL_FEE)
+            VALUES
+                (#FEE_ID#,
+                #CUSTOMER_ID#,
+                #MONEY#,
+                #START_DATE#,
+                #END_DATE#,
+                #TOTAL_FEE#
+                )
+             
+     </insert>
+   
+    <!-- 删除信息 -->
+    <delete id="delete"  parameterClass="map" >
+            DELETE FROM
+                 sys_fee 
+              WHERE
+                FEE_ID=#FEE_ID#   
+    </delete>
+    <!-- 改信息修 -->
+    <update id="updateBatch"  parameterClass="java.util.HashMap">
+           UPDATE 
+                    sys_fee  
+            SET
+                   CUSTOMER_ID=#CUSTOMER_ID#,
+                   MONEY=#MONEY#,
+                   START_DATE=#START_DATE#,
+                   END_DATE=#END_DATE#,
+                   TOTAL_FEE=#TOTAL_FEE#
+           WHERE
+                   FEE_ID=#FEE_ID#
+        </update>
+   
+    <!-- 查询相关信息 -->
+   <select id="getList" parameterClass="map"     resultClass="java.util.HashMap">
+        SELECT 
+            a.* ,b.CUSTOMER_NAME,b.CUSTOMER_ID CUST_ID
+        FROM 
+            sys_fee a,sys_customer b
+        WHERE
+    		a.CUSTOMER_ID=b.CUSTOMER_ID 
+        LIMIT
+          #startNum#,#limit#
+    </select>
+
+ <select id="getCount" parameterClass="map"  resultClass="java.lang.Integer" >
+        SELECT 
+              COUNT(*)
+        FROM
+              sys_fee
+      </select>
+     
+         <select id="signal" parameterClass="map"   resultClass="java.util.HashMap">
+     SELECT 
+            a.* ,b.CUSTOMER_NAME,b.CUSTOMER_ID CUST_ID
+        FROM 
+            sys_fee a,sys_customer b
+    WHERE
+    a.CUSTOMER_ID=b.CUSTOMER_ID and
+    FEE_ID=#FEE_ID#  
+    
+    </select>
+     
+     
+</sqlMap>
+
